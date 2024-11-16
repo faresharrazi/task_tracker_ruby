@@ -1,6 +1,7 @@
 # Task Tracker CLI
 
 A simple CLI tool to manage tasks with features like adding, updating, deleting, and listing tasks. Tasks are stored in a `tasks.json` file.
+[Project URL](https://roadmap.sh/projects/task-tracker)
 
 ## Features
 
