@@ -20,6 +20,27 @@ initialize_file
 
 puts "Welcome to Task Tracker!"
 
+def update_task (task_id, new_description)
+  tasks = load_tasks
+  task = tasks.find {|t| t['id'] == task_id.to_i}
+  if task
+    task['description'] = new_description
+    task['updatedAt'] = Time.now.to_s
+    save_tasks(tasks)
+    puts "Task ##{task_id} updated successfully"
+  else
+    puts "Task not found!"
+  end
+end
+
+def delete_task (task_id)
+  tasks = load_tasks
+
+  tasks.reject! {|t| t['id'] == task_id.to_i}
+  save_tasks(tasks)
+  puts "Task ##{task_id} deleted successfully"
+end
+
 def update_status (task_id, status)
   tasks = load_tasks
   task = tasks.find { |t| t['id'] == task_id.to_i }
@@ -68,6 +89,10 @@ command = ARGV[0]
 args = ARGV[1..] 
 
 case command
+when 'update'
+  update_task(args[0], args[1..].join(' '))
+when 'delete'
+  delete_task(args[0])
 when 'list'
   list_tasks(args[0])
 when 'add'
