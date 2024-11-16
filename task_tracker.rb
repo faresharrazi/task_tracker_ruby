@@ -18,12 +18,32 @@ end
 
 initialize_file
 
-# puts "Welcome to Task Tracker!"
+puts "Welcome to Task Tracker!"
 
+def update_status (task_id, status)
+  tasks = load_tasks
+  task = tasks.find { |t| t['id'] == task_id.to_i }
+  if task 
+    task['status'] = status
+    task['updatedAt'] = Time.now.to_s
+    save_tasks(tasks)
+    puts "Task ##{task_id} marked as #{status}"
+  else
+    puts "Task not found!"
+  end
+end
 
-
-# puts "Command: #{command}"
-# puts "Arguments: #{args.join(' ')}"
+def list_tasks (filter)
+  tasks = load_tasks
+  tasks = tasks.select {|task| task['status'] == filter} if filter
+  if tasks.empty?
+    puts "No tasks found"
+  else
+    tasks.each do |task|
+      puts "id: #{task['id']} - #{task['description']} - status: #{task['status']}"
+    end 
+  end
+end
 
 def add_task (description)
   tasks = load_tasks
@@ -48,8 +68,14 @@ command = ARGV[0]
 args = ARGV[1..] 
 
 case command
+when 'list'
+  list_tasks(args[0])
 when 'add'
   add_task(args.join(' '))
+when 'mark-done'
+  update_status(args[0], 'done')
+when 'mark-in-progress'
+  update_status(args[0], 'in-progress')
 else 
   puts 'Unknown command!'
 end
